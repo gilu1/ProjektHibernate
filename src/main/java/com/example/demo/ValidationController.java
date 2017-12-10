@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,7 +38,7 @@ public class ValidationController {
 				System.out.println(constraintViolation.getPropertyPath() + "	" + constraintViolation.getMessage());
 				list1.add(constraintViolation.getPropertyPath() + "	" + constraintViolation.getMessage());
 			}
-			model.addAllAttributes(list1);
+			model.addAttribute("lista",list1);
 		} else {
 			// save object }
 
@@ -44,6 +46,21 @@ public class ValidationController {
 
 		}
 		return "validate";
+	}
+	@RequestMapping(value="/validBook", method=RequestMethod.GET)
+	public String checkBook(Model model){
+		model.addAttribute("book", new Book());
+		return "validateBook";
+	
+	}
+	@RequestMapping(value="/validBook", method=RequestMethod.POST)
+	public String checkValidBook(@Valid Book book, BindingResult binding){
+		
+		if(binding.hasErrors()){
+			return "validateBook";
+		}else{
+			return "success";
+		}
 	}
 
 }

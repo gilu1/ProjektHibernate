@@ -5,10 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -23,20 +24,32 @@ public class Book {
 	private int id;
 	
 	@Column(name="title")
-	@Size(min =5)
+	@Size(min = 5)
 	private String title;
+
+	@ManyToOne
+	@JoinColumn(name="fk_category")
+	private Category category;
 	
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
 	@Column(name="rating")
 	@Min(1)
 	@Max(10)
 	private int rating;
 	
 	@Column(name="description")
-	@Size(max=600)
+	@Size(max = 600)
 	private String description;
 	
 	@Column(name="author")
-	@NotNull
+	@NotBlank
 	private String author;
 	
 	@Column(name="publisher")
